@@ -7,16 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import DTO.EapplyDTO;
-import DTO.EmpDTO;
 import UTILS.ConnHelper;
 
 public class EapplyDAO {
 	// 전체 조회
-	public List<EapplyDTO> getSelectAll() {
+	public List<EapplyDTO> getAllVacationList() {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		List<EapplyDTO> empList = new ArrayList<EapplyDTO>();
+		List<EapplyDTO> eapplyList = new ArrayList<EapplyDTO>();
 		
 		try {
 			conn = ConnHelper.getConnection();
@@ -33,7 +32,7 @@ public class EapplyDAO {
 					apdto.setStart_date(rs.getDate(5));
 					apdto.setEnd_date(rs.getDate(6));
 					apdto.setReason(rs.getString(7));
-					empList.add(apdto);
+					eapplyList.add(apdto);
 				}while(rs.next());
 			}else {
 				System.out.println("조회된 데이터가 없습니다.");
@@ -44,16 +43,15 @@ public class EapplyDAO {
 			ConnHelper.close(rs);
 			ConnHelper.close(pstmt);
 		}		
-		return empList;
+		return eapplyList;
 	}
 	
 	// 조건 조회
-	public EapplyDTO getSelectOne(int empno) {
+	public List<EapplyDTO> getMyVacationList(int empno) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		
-		EapplyDTO apdto = new EapplyDTO();
+		List<EapplyDTO> eapplyList = new ArrayList<EapplyDTO>();
 		
 		try {
 			conn = ConnHelper.getConnection();
@@ -62,6 +60,7 @@ public class EapplyDAO {
 			pstmt.setInt(1, empno);
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
+				EapplyDTO apdto = new EapplyDTO();
 				apdto.setApplyno(rs.getInt(1));
 				apdto.setEmpno(rs.getInt(2));
 				apdto.setHolidayno(rs.getInt(3));
@@ -69,14 +68,15 @@ public class EapplyDAO {
 				apdto.setStart_date(rs.getDate(5));
 				apdto.setEnd_date(rs.getDate(6));
 				apdto.setReason(rs.getString(7));
-			}			
+				eapplyList.add(apdto);
+			}
 		}catch(Exception e) {
 			System.out.println(e.getMessage());
 		}finally {
 			ConnHelper.close(rs);
 			ConnHelper.close(pstmt);
 		}		
-		return apdto; 
+		return eapplyList; 
 	}
 	
 	// 삽입

@@ -5,26 +5,21 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 import DTO.EmpDTO;
 import UTILS.ConnHelper;
 
 public class EmpDAO {
-	Scanner sc = new Scanner(System.in);
 	
 	// 로그인 체크
-	public boolean checkLogin() {
+	public boolean checkLogin(int empno, String ename) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 
 		EmpDTO edto = new EmpDTO();
 
-		System.out.print("사번을 입력해주세요 : ");
-		int empno = Integer.parseInt(sc.nextLine());
-		System.out.print("이름을 입력해주세요 : ");
-		String ename = sc.nextLine();
+
 		try {
 			conn = ConnHelper.getConnection();
 			String sql = "select ename from emp where empno = ?";
