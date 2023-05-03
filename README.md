@@ -1,1 +1,3 @@
-# Douzone_MiniProject
+## Douzone_MiniProject
+
+#### Douzone JDBC Mini Project
