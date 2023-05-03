@@ -3,13 +3,12 @@ package UTILS;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-public class ConnHelper {	
-	public ConnHelper() { // 생성자 호출시 연결객체 생성
-		getConnection();
-	}
+public class ConnHelper {
+	private static Connection conn;
+	private ConnHelper() {}
 	
-	private Connection getConnection() { // 연결객체
-		Connection conn = null;
+	public static Connection getConnection() { // 연결객체 싱글톤패턴 적용
+		if(conn != null) return conn;
 		try {
 			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "TEAM1", "1004");
 		}catch(Exception e) {
