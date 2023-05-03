@@ -10,7 +10,7 @@ import DTO.EapplyDTO;
 import UTILS.ConnHelper;
 
 public class EapplyDAO {
-	// 전체 조회
+	// 전체 휴가 조회
 	public List<EapplyDTO> getAllVacationList() {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -59,7 +59,7 @@ public class EapplyDAO {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, empno);
 			rs = pstmt.executeQuery();
-			if(rs.next()) {
+			while(rs.next()) {
 				EapplyDTO apdto = new EapplyDTO();
 				apdto.setApplyno(rs.getInt(1));
 				apdto.setEmpno(rs.getInt(2));
@@ -80,22 +80,20 @@ public class EapplyDAO {
 	}
 	
 	// 삽입
-	public int empInsert(EapplyDTO apdto) {
+	public void applyVacation(EapplyDTO apdto) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		int row = 0;
 
 		try {
 			conn = ConnHelper.getConnection();
-			String sql = "insert into emp(applyno, empno, holidayno, stateno, start_date, end_date, reason) values(?, ?, ?, ?, ?, ?, ?)";
-			pstmt = conn.prepareStatement(sql);			
-			pstmt.setInt(1, apdto.getApplyno());
-			pstmt.setInt(2, apdto.getEmpno());
-			pstmt.setInt(3, apdto.getHolidayno());
-			pstmt.setInt(4, apdto.getStateno());
-			pstmt.setDate(5, apdto.getStart_date());
-			pstmt.setDate(6, apdto.getEnd_date());
-			pstmt.setString(7, apdto.getReason());
+			String sql = "insert into eapply(applyno, empno, holidayno, stateno, start_date, end_date, reason) values(eapply_seq.nextval, ?, ?, 0, ?, ?, ?)";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, apdto.getEmpno());
+			pstmt.setInt(2, apdto.getHolidayno());
+			pstmt.setDate(3, apdto.getStart_date());
+			pstmt.setDate(4, apdto.getEnd_date());
+			pstmt.setString(5, apdto.getReason());
 			
 			row = pstmt.executeUpdate();
 			if(row > 0) {
@@ -105,8 +103,7 @@ public class EapplyDAO {
 			System.out.println(e.getMessage());
 		}finally {
 			ConnHelper.close(pstmt);
-		}		
-		return row;
+		}
 	}
 	
 	// 삭제
@@ -140,7 +137,7 @@ public class EapplyDAO {
 		
 		try {
 			conn = ConnHelper.getConnection();
-			String sql = "update emp set start_date = ?, end_date = ?, reason = ? where applyno = ? and empno = ?";
+			String sql = "update eapply set start_date = ?, end_date = ?, reason = ? where applyno = ? and empno = ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setDate(1, apdto.getStart_date());
 			pstmt.setDate(2, apdto.getEnd_date());

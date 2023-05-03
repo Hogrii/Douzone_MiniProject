@@ -1,3 +1,4 @@
+import java.sql.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -67,6 +68,7 @@ public class Program {
 			String menuNum = sc.nextLine();
 			switch (menuNum) {
 			case "1":
+				applyVacation();
 				break;
 			case "2":
 				List<EapplyDTO> vacationList = eapply.getMyVacationList(loginId);
@@ -83,6 +85,24 @@ public class Program {
 		}
 	}
 
+	public void applyVacation() {
+		EapplyDTO apDTO = new EapplyDTO();
+		apDTO.setEmpno(loginId);
+		System.out.println("휴가 유형을 선택하세요");
+		System.out.println("1. 공가  2. 병가  3. 경조사");
+		System.out.print(">> ");
+		apDTO.setHolidayno(Integer.parseInt(sc.nextLine()));
+		System.out.print("휴가 시작일을 입력해주세요 (YY-MM-DD) : ");
+		apDTO.setStart_date(Date.valueOf(sc.nextLine()));
+		System.out.print("휴가 종료일을 입력해주세요 (YY-MM-DD) : ");
+		apDTO.setEnd_date(Date.valueOf(sc.nextLine()));
+		System.out.print("휴가 사유를 입력해주세요 : ");
+		apDTO.setReason(sc.nextLine());
+		
+		eapply.applyVacation(apDTO);
+		
+	}
+	
 	public void logout() {
 		loginId = 0;
 		loginName = "";
