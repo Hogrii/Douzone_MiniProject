@@ -142,20 +142,17 @@ public class EapplyDAO {
 	}
 	
 	// 결재 처리 -> 사용
-	public int vacationConfirm(EapplyDTO apdto) {
+	public int vacationConfirm(int applyno, int stateno) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		int row = 0;
 		
 		try {
 			conn = ConnHelper.getConnection();
-			String sql = "update eapply set start_date = ?, end_date = ?, reason = ? where applyno = ? and empno = ?";
+			String sql = "update eapply set stateno = ? where applyno = ?";
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setDate(1, apdto.getStart_date());
-			pstmt.setDate(2, apdto.getEnd_date());
-			pstmt.setString(3, apdto.getReason());
-			pstmt.setInt(4, apdto.getApplyno());
-			pstmt.setInt(5, apdto.getEmpno());
+			pstmt.setInt(1, stateno);
+			pstmt.setInt(2, applyno);
 			
 			row = pstmt.executeUpdate();
 			if(row > 0) {

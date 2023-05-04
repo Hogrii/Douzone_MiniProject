@@ -71,8 +71,7 @@ public class Program {
 				applyVacation();
 				break;
 			case "2":
-				List<EapplyDTO> vacationList = eapply.getMyVacationList(loginId);
-				printVacation(vacationList);
+				getMyVacationList();
 				break;
 			case "3":
 				vacationConfirm();
@@ -86,13 +85,23 @@ public class Program {
 		}
 	}
 	
+	public void getMyVacationList() {
+		List<EapplyDTO> vacationList = eapply.getMyVacationList(loginId);
+		printVacation(vacationList);
+	}
+	
 	public void vacationConfirm() {
 		EapplyDTO apDTO = new EapplyDTO();
 		List<EapplyDTO> vacationList = eapply.vacationList(loginId);
 		printVacation(vacationList);
-		System.out.println("결재를 처리할 사원의 번호를 입력해주세요");
+		System.out.println("결재를 처리할 휴가신청번호를 입력해주세요");
 		System.out.print(">> ");
-		int empno = Integer.parseInt(sc.nextLine());
+		int applyno = Integer.parseInt(sc.nextLine());
+		System.out.println("휴가신청 상태를 변경해주세요");
+		System.out.println("0. 대기  1. 승인  2. 반려");
+		System.out.print(">> ");
+		int stateno = Integer.parseInt(sc.nextLine());		
+		eapply.vacationConfirm(applyno, stateno);
 	}
 
 	public void applyVacation() {
