@@ -11,7 +11,7 @@ import UTILS.ConnHelper;
 
 public class EmpDAO {
 	
-	// 로그인 체크
+	// 로그인 체크 -> 사용
 	public boolean checkLogin(int empno, String ename) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;

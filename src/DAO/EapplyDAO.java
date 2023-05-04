@@ -4,51 +4,13 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import DTO.EapplyDTO;
 import UTILS.ConnHelper;
 
-public class EapplyDAO {
-	// 전체 휴가 조회
-	public List<EapplyDTO> getAllVacationList() {
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		List<EapplyDTO> eapplyList = new ArrayList<EapplyDTO>();
-		
-		try {
-			conn = ConnHelper.getConnection();
-			String sql = "select applyno, empno, holidayno, stateno, start_date, end_date, reason from eapply";
-			pstmt = conn.prepareStatement(sql);
-			rs = pstmt.executeQuery();
-			if(rs.next()) {
-				do {
-					EapplyDTO apdto = new EapplyDTO();
-					apdto.setApplyno(rs.getInt(1));
-					apdto.setEmpno(rs.getInt(2));
-					apdto.setHolidayno(rs.getInt(3));
-					apdto.setStateno(rs.getInt(4));
-					apdto.setStart_date(rs.getDate(5));
-					apdto.setEnd_date(rs.getDate(6));
-					apdto.setReason(rs.getString(7));
-					eapplyList.add(apdto);
-				}while(rs.next());
-			}else {
-				System.out.println("조회된 데이터가 없습니다.");
-			}
-		}catch(Exception e) {
-			System.out.println(e.getMessage());
-		}finally {
-			ConnHelper.close(rs);
-			ConnHelper.close(pstmt);
-		}		
-		return eapplyList;
-	}
-	
+public class EapplyDAO {	
 	// 휴가 신청 목록 -> 사용
 	public List<EapplyDTO> getMyVacationList(int empno) {
 		Connection conn = null;

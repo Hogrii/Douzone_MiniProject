@@ -34,10 +34,10 @@ public class Program {
 			String menu = sc.nextLine();
 			switch (menu) {
 			case "1":
-				login();
+				login(); // 로그인
 				break;
 			case "0":
-				System.exit(0);
+				System.exit(0); // 종료
 				break;
 			default:
 				break;
@@ -45,6 +45,7 @@ public class Program {
 		}
 	}
 
+	// 로그인
 	public void login() {
 		System.out.print("사번을 입력해주세요 : ");
 		int empno = Integer.parseInt(sc.nextLine());
@@ -59,6 +60,7 @@ public class Program {
 		}
 	}
 
+	// 로그인시 나오는 메뉴
 	public void loginMenu() {
 		while (true) {
 			System.out.println(loginName + "님 환영합니다.");
@@ -68,16 +70,16 @@ public class Program {
 			String menuNum = sc.nextLine();
 			switch (menuNum) {
 			case "1":
-				applyVacation();
+				applyVacation(); // 휴가 신청
 				break;
 			case "2":
-				getMyVacationList();
+				getMyVacationList(); // 휴가 신청 목록
 				break;
 			case "3":
-				vacationConfirm();
+				vacationConfirm(); // 휴가 결제
 				break;
 			case "0":
-				logout();
+				logout(); // 로그아웃
 				return;
 			default:
 				break;
@@ -85,6 +87,25 @@ public class Program {
 		}
 	}
 	
+	// 휴가 신청
+	public void applyVacation() {
+		EapplyDTO apDTO = new EapplyDTO();
+		apDTO.setEmpno(loginId);
+		System.out.println("휴가 유형을 선택하세요");
+		System.out.println("1. 공가  2. 병가  3. 경조사");
+		System.out.print(">> ");
+		apDTO.setHolidayno(Integer.parseInt(sc.nextLine()));
+		System.out.print("휴가 시작일을 입력해주세요 (YYYY-MM-DD) : ");
+		apDTO.setStart_date(Date.valueOf(sc.nextLine()));
+		System.out.print("휴가 종료일을 입력해주세요 (YYYY-MM-DD) : ");
+		apDTO.setEnd_date(Date.valueOf(sc.nextLine()));
+		System.out.print("휴가 사유를 입력해주세요 : ");
+		apDTO.setReason(sc.nextLine());
+
+		eapply.applyVacation(apDTO);
+	}
+	
+	// 휴가 신청 목록
 	public void getMyVacationList() {
 		List<EapplyDTO> vacationList = eapply.getMyVacationList(loginId);
 		System.out.println("신청하신 휴가리스트입니다");
@@ -95,16 +116,17 @@ public class Program {
 		String menuNum = sc.nextLine();
 		switch (menuNum) {
 		case "1":
-			updateMyVacation();
+			updateMyVacation(); // 내 휴가 수정
 			break;
 		case "2":
-			deleteMyVacation();
+			deleteMyVacation(); // 내 휴가 삭제
 			break;
 		default:
 			break;
 		}
 	}
 
+	// 내 휴가 수정
 	public void updateMyVacation() {
 		System.out.println("수정하실 휴가 번호를 입력해주세요");
 		System.out.print(">>");
@@ -139,6 +161,7 @@ public class Program {
 		printVacation(vacationList);
 	}
 	
+	// 내 휴가 삭제
 	public void deleteMyVacation() {
 		System.out.println("삭제하실 휴가 번호를 입력해주세요");
 		System.out.print(">>");
@@ -148,6 +171,7 @@ public class Program {
 		printVacation(vacationList);
 	}
 	
+	// 휴가 결제
 	public void vacationConfirm() {
 		EapplyDTO apDTO = new EapplyDTO();
 		List<EapplyDTO> vacationList = eapply.vacationList(loginId);
@@ -163,40 +187,25 @@ public class Program {
 		
 		EapplyDTO afApDTO = eapply.getMyVacation(applyno);
 		int afStateno = afApDTO.getStateno();
-		if(afStateno==1) {
+		if(afStateno==1) { // 승인시 차감
 			restVacationApply(applyno);			
 		}
-	}
-	
+	}	
 
+	// 휴가일수 차감
 	public void restVacationApply(int applyno) {
 		EapplyDTO apDTO = eapply.getMyVacation(applyno);
 		int vacationDay = eapply.restVacationApply(applyno, apDTO.getStart_date(), apDTO.getEnd_date());
 		rest.restVacationApply(apDTO.getEmpno(), vacationDay);
 	}
 
-	public void applyVacation() {
-		EapplyDTO apDTO = new EapplyDTO();
-		apDTO.setEmpno(loginId);
-		System.out.println("휴가 유형을 선택하세요");
-		System.out.println("1. 공가  2. 병가  3. 경조사");
-		System.out.print(">> ");
-		apDTO.setHolidayno(Integer.parseInt(sc.nextLine()));
-		System.out.print("휴가 시작일을 입력해주세요 (YYYY-MM-DD) : ");
-		apDTO.setStart_date(Date.valueOf(sc.nextLine()));
-		System.out.print("휴가 종료일을 입력해주세요 (YYYY-MM-DD) : ");
-		apDTO.setEnd_date(Date.valueOf(sc.nextLine()));
-		System.out.print("휴가 사유를 입력해주세요 : ");
-		apDTO.setReason(sc.nextLine());
-
-		eapply.applyVacation(apDTO);
-	}
-
+	// 로그아웃
 	public void logout() {
 		loginId = 0;
 		loginName = "";
 	}
-
+	
+	// 휴가 프린트
 	public void printVacation(List<EapplyDTO> vacationList) {
 		for (EapplyDTO vacation : vacationList) {
 			System.out.println(vacation.toString());
