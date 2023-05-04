@@ -84,7 +84,7 @@ public class Program {
 			}
 		}
 	}
-
+	
 	public void getMyVacationList() {
 		List<EapplyDTO> vacationList = eapply.getMyVacationList(loginId);
 		System.out.println("신청하신 휴가리스트입니다");
@@ -159,7 +159,20 @@ public class Program {
 		System.out.println("0. 대기  1. 승인  2. 반려");
 		System.out.print(">> ");
 		int stateno = Integer.parseInt(sc.nextLine());
-		eapply.vacationConfirm(applyno, stateno);
+		eapply.vacationConfirm(applyno, stateno); // 수정
+		
+		EapplyDTO afApDTO = eapply.getMyVacation(applyno);
+		int afStateno = afApDTO.getStateno();
+		if(afStateno==1) {
+			restVacationApply(applyno);			
+		}
+	}
+	
+
+	public void restVacationApply(int applyno) {
+		EapplyDTO apDTO = eapply.getMyVacation(applyno);
+		int vacationDay = eapply.restVacationApply(applyno, apDTO.getStart_date(), apDTO.getEnd_date());
+		rest.restVacationApply(apDTO.getEmpno(), vacationDay);
 	}
 
 	public void applyVacation() {
@@ -177,7 +190,6 @@ public class Program {
 		apDTO.setReason(sc.nextLine());
 
 		eapply.applyVacation(apDTO);
-
 	}
 
 	public void logout() {
