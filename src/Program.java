@@ -111,9 +111,9 @@ public class Program {
 		System.out.println("1. 공가  2. 병가  3. 경조사");
 		System.out.print(">> ");
 		apDTO.setHolidayno(Integer.parseInt(sc.nextLine()));
-		System.out.print("휴가 시작일을 입력해주세요 (YY-MM-DD) : ");
+		System.out.print("휴가 시작일을 입력해주세요 (YYYY-MM-DD) : ");
 		apDTO.setStart_date(Date.valueOf(sc.nextLine()));
-		System.out.print("휴가 종료일을 입력해주세요 (YY-MM-DD) : ");
+		System.out.print("휴가 종료일을 입력해주세요 (YYYY-MM-DD) : ");
 		apDTO.setEnd_date(Date.valueOf(sc.nextLine()));
 		System.out.print("휴가 사유를 입력해주세요 : ");
 		apDTO.setReason(sc.nextLine());
