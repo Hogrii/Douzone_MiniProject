@@ -46,7 +46,7 @@ public class EapplyDAO {
 		return eapplyList;
 	}
 	
-	// 조건 조회 -> 사용
+	// 휴가 신청 목록 -> 사용
 	public List<EapplyDTO> getMyVacationList(int empno) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -79,8 +79,8 @@ public class EapplyDAO {
 		return eapplyList; 
 	}
 	
-	// 조건 조회 -> 사용
-	public List<EapplyDTO> vacationList()(int empno) {
+	// 휴가 결제 -> 사용
+	public List<EapplyDTO> vacationList(int empno) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -88,7 +88,9 @@ public class EapplyDAO {
 		
 		try {
 			conn = ConnHelper.getConnection();
-			String sql = "select applyno, empno, holidayno, stateno, start_date, end_date, reason from eapply where mgr = ?";
+			String sql = "select a.applyno, a.empno, a.holidayno, a.stateno, a.start_date, a.end_date, a.reason"
+					+ " from eapply a join emp e on (a.empno = e.empno)"
+					+ " where e.mgr = ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, empno);
 			rs = pstmt.executeQuery();
@@ -111,7 +113,8 @@ public class EapplyDAO {
 		}		
 		return eapplyList; 
 	}
-	// 삽입 -> 사용
+	
+	// 휴가 신청 -> 사용
 	public void applyVacation(EapplyDTO apdto) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -138,30 +141,7 @@ public class EapplyDAO {
 		}
 	}
 	
-	// 삭제
-	public int empDelete(int empno) {
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		int row = 0;
-		
-		try {
-			conn = ConnHelper.getConnection();
-			String sql = "delete from eapply where empno = ?";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, empno);
-			row = pstmt.executeUpdate();
-			if(row > 0) {
-				System.out.println("delete row count : " + row);
-			}
-		}catch(Exception e) {
-			System.out.println(e.getMessage());
-		}finally {
-			ConnHelper.close(pstmt);
-		}		
-		return row;
-	}
-	
-	// 수정
+	// 결재 처리 -> 사용
 	public int vacationConfirm(EapplyDTO apdto) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -188,4 +168,29 @@ public class EapplyDAO {
 		}		
 		return row;
 	}	
+	
+	// 삭제
+	public int empDelete(int empno) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		int row = 0;
+		
+		try {
+			conn = ConnHelper.getConnection();
+			String sql = "delete from eapply where empno = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, empno);
+			row = pstmt.executeUpdate();
+			if(row > 0) {
+				System.out.println("delete row count : " + row);
+			}
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+		}finally {
+			ConnHelper.close(pstmt);
+		}		
+		return row;
+	}
+	
+
 }

@@ -88,8 +88,11 @@ public class Program {
 	
 	public void vacationConfirm() {
 		EapplyDTO apDTO = new EapplyDTO();
-		vacationList(loginId);
-		apDTO.setEmpno(loginId);
+		List<EapplyDTO> vacationList = eapply.vacationList(loginId);
+		printVacation(vacationList);
+		System.out.println("결재를 처리할 사원의 번호를 입력해주세요");
+		System.out.print(">> ");
+		int empno = Integer.parseInt(sc.nextLine());
 	}
 
 	public void applyVacation() {
