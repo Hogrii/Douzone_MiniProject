@@ -75,6 +75,7 @@ public class Program {
 				printVacation(vacationList);
 				break;
 			case "3":
+				vacationConfirm();
 				break;
 			case "0":
 				logout();
@@ -83,6 +84,12 @@ public class Program {
 				break;
 			}
 		}
+	}
+	
+	public void vacationConfirm() {
+		EapplyDTO apDTO = new EapplyDTO();
+		vacationList(loginId);
+		apDTO.setEmpno(loginId);
 	}
 
 	public void applyVacation() {

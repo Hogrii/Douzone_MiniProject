@@ -46,7 +46,7 @@ public class EapplyDAO {
 		return eapplyList;
 	}
 	
-	// 조건 조회
+	// 조건 조회 -> 사용
 	public List<EapplyDTO> getMyVacationList(int empno) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -79,7 +79,39 @@ public class EapplyDAO {
 		return eapplyList; 
 	}
 	
-	// 삽입
+	// 조건 조회 -> 사용
+	public List<EapplyDTO> vacationList()(int empno) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<EapplyDTO> eapplyList = new ArrayList<EapplyDTO>();
+		
+		try {
+			conn = ConnHelper.getConnection();
+			String sql = "select applyno, empno, holidayno, stateno, start_date, end_date, reason from eapply where mgr = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, empno);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				EapplyDTO apdto = new EapplyDTO();
+				apdto.setApplyno(rs.getInt(1));
+				apdto.setEmpno(rs.getInt(2));
+				apdto.setHolidayno(rs.getInt(3));
+				apdto.setStateno(rs.getInt(4));
+				apdto.setStart_date(rs.getDate(5));
+				apdto.setEnd_date(rs.getDate(6));
+				apdto.setReason(rs.getString(7));
+				eapplyList.add(apdto);
+			}
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+		}finally {
+			ConnHelper.close(rs);
+			ConnHelper.close(pstmt);
+		}		
+		return eapplyList; 
+	}
+	// 삽입 -> 사용
 	public void applyVacation(EapplyDTO apdto) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -130,7 +162,7 @@ public class EapplyDAO {
 	}
 	
 	// 수정
-	public int empUpdate(EapplyDTO apdto) {
+	public int vacationConfirm(EapplyDTO apdto) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		int row = 0;
