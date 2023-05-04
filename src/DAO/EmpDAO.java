@@ -19,7 +19,6 @@ public class EmpDAO {
 
 		EmpDTO edto = new EmpDTO();
 
-
 		try {
 			conn = ConnHelper.getConnection();
 			String sql = "select ename from emp where empno = ?";
