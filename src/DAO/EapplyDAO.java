@@ -164,19 +164,44 @@ public class EapplyDAO {
 			ConnHelper.close(pstmt);
 		}		
 		return row;
-	}	
+	}
 	
-	// 삭제
-	public int empDelete(int empno) {
+	// 휴가 수정 -> 사용
+	public int updateMyVacation(EapplyDTO apDTO) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		int row = 0;
 		
 		try {
 			conn = ConnHelper.getConnection();
-			String sql = "delete from eapply where empno = ?";
+			String sql = "update eapply set stateno = ? where applyno = ?";
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, empno);
+			pstmt.setInt(1, stateno);
+			pstmt.setInt(2, applyno);
+			
+			row = pstmt.executeUpdate();
+			if(row > 0) {
+				System.out.println("update row count : " + row);
+			}
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+		}finally {
+			ConnHelper.close(pstmt);
+		}		
+		return row;
+	}	
+	
+	// 휴가 삭제 -> 사용
+	public int deleteMyVacation(int applyno) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		int row = 0;
+		
+		try {
+			conn = ConnHelper.getConnection();
+			String sql = "delete from eapply where applyno = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, applyno);
 			row = pstmt.executeUpdate();
 			if(row > 0) {
 				System.out.println("delete row count : " + row);
