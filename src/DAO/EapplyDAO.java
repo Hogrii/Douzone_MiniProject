@@ -1,9 +1,12 @@
 package DAO;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import DTO.EapplyDTO;
@@ -77,6 +80,37 @@ public class EapplyDAO {
 			ConnHelper.close(pstmt);
 		}		
 		return eapplyList; 
+	}
+	
+	// 휴가 신청 목록 -> 사용
+	public EapplyDTO getMyVacation(int applyno) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		EapplyDTO apdto = new EapplyDTO();
+		
+		try {
+			conn = ConnHelper.getConnection();
+			String sql = "select applyno, empno, holidayno, stateno, start_date, end_date, reason from eapply where applyno = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, applyno);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {				
+				apdto.setApplyno(rs.getInt(1));
+				apdto.setEmpno(rs.getInt(2));
+				apdto.setHolidayno(rs.getInt(3));
+				apdto.setStateno(rs.getInt(4));
+				apdto.setStart_date(rs.getDate(5));
+				apdto.setEnd_date(rs.getDate(6));
+				apdto.setReason(rs.getString(7));
+			}
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+		}finally {
+			ConnHelper.close(rs);
+			ConnHelper.close(pstmt);
+		}		
+		return apdto; 
 	}
 	
 	// 휴가 결제 -> 사용
@@ -217,5 +251,30 @@ public class EapplyDAO {
 		return row;
 	}
 	
+	// 휴가 날짜 체크 -> 사용
+	public int checkVacationDay(int applyno, Date start_date) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int dateCal = 0;
+		
+		try {
+			conn = ConnHelper.getConnection();
+			String sql = "select sysdate-? from eapply where applyno = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setDate(1, start_date);
+			pstmt.setInt(2, applyno);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				dateCal = rs.getInt(1);
+			}
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+		}finally {
+			ConnHelper.close(rs);
+			ConnHelper.close(pstmt);
+		}
+		return dateCal;
+	}
 
 }

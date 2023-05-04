@@ -106,10 +106,22 @@ public class Program {
 	}
 
 	public void updateMyVacation() {
-		EapplyDTO apDTO = new EapplyDTO();
 		System.out.println("수정하실 휴가 번호를 입력해주세요");
 		System.out.print(">>");
-		apDTO.setApplyno(Integer.parseInt(sc.nextLine()));
+		int applyno = Integer.parseInt(sc.nextLine());
+		
+		EapplyDTO bfApDTO = eapply.getMyVacation(applyno);
+		
+		int dateCheck = eapply.checkVacationDay(bfApDTO.getApplyno(), bfApDTO.getStart_date());
+		System.out.println("dateCheck : " + dateCheck);
+		if(dateCheck>0) {
+			System.out.println("이미 지난 휴가입니다");
+			return;
+		}
+		
+		EapplyDTO apDTO = new EapplyDTO();
+
+		apDTO.setApplyno(applyno);
 		System.out.println("휴가 유형을 변경하세요");
 		System.out.println("1. 공가  2. 병가  3. 경조사");
 		System.out.print(">> ");
