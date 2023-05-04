@@ -239,8 +239,8 @@ public class EapplyDAO {
 		return dateCal;
 	}
 	
-	// 휴가일수 계산 -> 사용
-	public int restVacationApply(int applyno, Date start_date, Date end_date) {
+	// 휴가일수 얻기 -> 사용
+	public int getVacationDay(int applyno, Date start_date, Date end_date) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -253,6 +253,32 @@ public class EapplyDAO {
 			pstmt.setDate(1, end_date);
 			pstmt.setDate(2, start_date);
 			pstmt.setInt(3, applyno);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				dateCal = rs.getInt(1);
+			}
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+		}finally {
+			ConnHelper.close(rs);
+			ConnHelper.close(pstmt);
+		}
+		return dateCal;
+	}
+	
+	// 휴가일수 얻기 -> 사용
+	public int getVacationDay(Date start_date, Date end_date) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int dateCal = 0;
+		
+		try {
+			conn = ConnHelper.getConnection();
+			String sql = "select ?-? from dual";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setDate(1, end_date);
+			pstmt.setDate(2, start_date);
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
 				dateCal = rs.getInt(1);

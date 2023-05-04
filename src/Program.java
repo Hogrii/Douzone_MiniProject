@@ -101,8 +101,19 @@ public class Program {
 		apDTO.setEnd_date(Date.valueOf(sc.nextLine()));
 		System.out.print("휴가 사유를 입력해주세요 : ");
 		apDTO.setReason(sc.nextLine());
-
-		eapply.applyVacation(apDTO);
+		
+		// 신청한 휴가일수
+		int vacationDay = eapply.getVacationDay(apDTO.getStart_date(), apDTO.getEnd_date());
+		System.out.println("vacationDay : " + vacationDay);
+		// 나의 잔여휴가일수
+		int restVacationDay = rest.getRestDay(loginId);
+		System.out.println("restVacationDay : " + restVacationDay);
+		
+		if(restVacationDay-vacationDay > 0) {
+			eapply.applyVacation(apDTO);			
+		}else {
+			System.out.println("잔여 휴가일이 부족합니다");
+		}
 	}
 	
 	// 휴가 신청 목록
@@ -195,7 +206,7 @@ public class Program {
 	// 휴가일수 차감
 	public void restVacationApply(int applyno) {
 		EapplyDTO apDTO = eapply.getMyVacation(applyno);
-		int vacationDay = eapply.restVacationApply(applyno, apDTO.getStart_date(), apDTO.getEnd_date());
+		int vacationDay = eapply.getVacationDay(applyno, apDTO.getStart_date(), apDTO.getEnd_date());
 		rest.restVacationApply(apDTO.getEmpno(), vacationDay);
 	}
 
