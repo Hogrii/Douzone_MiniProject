@@ -65,7 +65,7 @@ public class Program {
 		while (true) {
 			System.out.println(loginName + "님 환영합니다.");
 			System.out.println("이용하실 메뉴를 선택해주세요.");
-			System.out.println("1. 휴가신청  2. 휴가신청목록  3. 휴가결제  0. 로그아웃");
+			System.out.println("1. 휴가신청  2. 휴가신청목록  3. 휴가결제  4. 잔여 휴가 일수  0. 로그아웃");
 			System.out.print(">> ");
 			String menuNum = sc.nextLine();
 			switch (menuNum) {
@@ -77,6 +77,9 @@ public class Program {
 				break;
 			case "3":
 				vacationConfirm(); // 휴가 결제
+				break;
+			case "4":
+				getResdtDay();
 				break;
 			case "0":
 				logout(); // 로그아웃
@@ -122,7 +125,7 @@ public class Program {
 		System.out.println("신청하신 휴가리스트입니다");
 		printVacation(vacationList);
 		System.out.println("사용할 메뉴를 선택해주세요");
-		System.out.println("1. 수정  2. 삭제");
+		System.out.println("1. 수정  2. 삭제  0. 취소");
 		System.out.print(">> ");
 		String menuNum = sc.nextLine();
 		switch (menuNum) {
@@ -208,6 +211,11 @@ public class Program {
 		EapplyDTO apDTO = eapply.getMyVacation(applyno);
 		int vacationDay = eapply.getVacationDay(applyno, apDTO.getStart_date(), apDTO.getEnd_date());
 		rest.restVacationApply(apDTO.getEmpno(), vacationDay);
+	}
+	
+	// 내 잔여휴가일수 확인
+	public void getResdtDay() {
+		System.out.println(loginName + "님의 잔여 휴가일수는 " + rest.getRestDay(loginId) + "일 입니다");
 	}
 
 	// 로그아웃
