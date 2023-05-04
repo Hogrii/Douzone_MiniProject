@@ -107,8 +107,24 @@ public class Program {
 
 	public void updateMyVacation() {
 		EapplyDTO apDTO = new EapplyDTO();
+		System.out.println("수정하실 휴가 번호를 입력해주세요");
+		System.out.print(">>");
+		apDTO.setApplyno(Integer.parseInt(sc.nextLine()));
+		System.out.println("휴가 유형을 변경하세요");
+		System.out.println("1. 공가  2. 병가  3. 경조사");
+		System.out.print(">> ");
+		apDTO.setHolidayno(Integer.parseInt(sc.nextLine()));
+		System.out.print("휴가 시작일을 변경해주세요 (YYYY-MM-DD) : ");
+		apDTO.setStart_date(Date.valueOf(sc.nextLine()));
+		System.out.print("휴가 종료일을 변경해주세요 (YYYY-MM-DD) : ");
+		apDTO.setEnd_date(Date.valueOf(sc.nextLine()));
+		System.out.print("휴가 사유를 변경해주세요 : ");
+		apDTO.setReason(sc.nextLine());
 		
-		eapply.updateMyVacation();
+		eapply.updateMyVacation(apDTO);
+		
+		List<EapplyDTO> vacationList = eapply.getMyVacationList(loginId);
+		printVacation(vacationList);
 	}
 	
 	public void deleteMyVacation() {

@@ -174,10 +174,13 @@ public class EapplyDAO {
 		
 		try {
 			conn = ConnHelper.getConnection();
-			String sql = "update eapply set stateno = ? where applyno = ?";
+			String sql = "update eapply set holidayno = ?, start_date = ?, end_date = ?, reason = ? where applyno = ?";
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, stateno);
-			pstmt.setInt(2, applyno);
+			pstmt.setInt(1, apDTO.getHolidayno());
+			pstmt.setDate(2, apDTO.getStart_date());
+			pstmt.setDate(3, apDTO.getEnd_date());
+			pstmt.setString(4, apDTO.getReason());
+			pstmt.setInt(5, apDTO.getApplyno());
 			
 			row = pstmt.executeUpdate();
 			if(row > 0) {
